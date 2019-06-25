@@ -1,10 +1,10 @@
 # module Calendars
 
-export VerticalCalendar, Date, Span, Day
+export VerticalCalendar, Date, DateSpan, Day
 
 using Dates: ENGLISH, DatePeriod, Date, Month, Week, Day, firstdayofmonth, lastdayofmonth, firstdayofweek, year, month, day, today
 
-struct Span
+struct DateSpan
     dates::Vector{Date}
     color::Symbol
 end
@@ -12,13 +12,18 @@ end
 struct VerticalCalendar
     startDate::Date
     endDate::Date
-    spans::Vector{Span}
-    function VerticalCalendar(startDate::Date, endDate::Date, spans::Vector{Span}=Span[])
-        new(startDate, endDate, spans)
+    datespans::Vector{DateSpan}
+    cell::NamedTuple{(:size, :margin)}
+    function VerticalCalendar(startDate::Date,
+                              endDate::Date
+                              ;
+                              datespans::Vector{DateSpan}=DateSpan[],
+                              cell::NamedTuple{(:size, :margin)} = (size = (2, 1), margin = (1, 0)))
+        new(startDate, endDate, datespans, cell)
     end
     function VerticalCalendar()
         d = today()
-        VerticalCalendar(firstdayofmonth(d), lastdayofmonth(d), [Span([d], :cyan)])
+        VerticalCalendar(firstdayofmonth(d), lastdayofmonth(d), [DateSpan([d], :cyan)])
     end
 end
 
@@ -45,32 +50,41 @@ function Base.show(io::IO, cal::VerticalCalendar)
         end
     end
 
+    cellwidth = cal.cell.size[1] + cal.cell.margin[1]
     leftside = 4
     prev_col = 0
     prev_year = nothing
+    diff = 4 - cellwidth
+    diff < 0 && (diff = 0)
     print(io, repeat(' ', leftside))
-    for (col, year) in th_years
-        if prev_year != year
-            n = 3col - 3prev_col - (prev_year === nothing ? 3 : 4)
-            print(io, repeat(' ', n))
-            print(io, rpad(string(year), 4))
+    (col, y) = first(th_years)
+    n = cellwidth * (col - prev_col - 1) - diff
+    n > 0 && print(io, repeat(' ', diff))
+    for (col, y) in th_years
+        if prev_year != y
+            n = cellwidth * (col - prev_col - 1) - diff
+            n > 0 && print(io, repeat(' ', n))
+            print(io, rpad(string(y), cellwidth, ' '))
             prev_col = col
-            prev_year = year
+            prev_year = y
         end
     end
     println(io)
 
     prev_col = 0
-    print(io, repeat(' ', leftside))
-    for (col, month) in th_months
-        print(io, repeat(' ', 3col - 3prev_col - 3))
-        print(io, string(month))
+    diff = 3 - cellwidth
+    diff < 0 && (diff = 0)
+    print(io, repeat(' ', leftside + diff))
+    for (idx, (col, month)) in enumerate(th_months)
+        n = cellwidth * (col - prev_col - 1) - diff
+        print(io, repeat(' ', n))
+        print(io, rpad(month, cellwidth, ' '))
         prev_col = col
     end
     println(io)
 
     colormap = Dict{Date,Symbol}()
-    for span in cal.spans, date in span.dates
+    for span in cal.datespans, date in span.dates
         colormap[date] = span.color
     end
     for row in 1:rows
@@ -83,16 +97,16 @@ function Base.show(io::IO, cal::VerticalCalendar)
         len = length(days)
         for (idx, d) in enumerate(days)
             if cal.startDate <= d <= cal.endDate
-                str = lpad((string ∘ day)(d), 2)
+                str = lpad((string ∘ day)(d), cal.cell.size[1], ' ')
                 if haskey(colormap, d)
                     printstyled(io, str, color=colormap[d])
                 else
                     print(io, str)
                 end
             else
-                print(io, "  ")
+                print(io, repeat(' ', cal.cell.size[1]))
             end
-            idx < len && print(io, ' ')
+            idx < len && print(io, repeat(' ', cal.cell.margin[1]))
         end
         row < rows && println(io)
     end
