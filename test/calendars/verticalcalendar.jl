@@ -28,4 +28,16 @@ Wed 14  21  28   5  12  19  26   2   9  16  23  30   6  13
 Fri 16  23  30   7  14  21  28   4  11  18  25   1   8  15
     17  24   1   8  15  22  29   5  12  19  26   2   9    """
 
+cal4 = VerticalCalendar(Date(2018,11,12), Date(2018,11,15))
+@test sprint(show, cal4) == """
+    2018
+    Nov
+      
+Mon 12
+    13
+Wed 14
+    15
+Fri   
+      """
+
 end # module test_calendars_verticalcalendar

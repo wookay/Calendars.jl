@@ -29,7 +29,7 @@ end
 
 function Base.show(io::IO, cal::VerticalCalendar)
     sunday = firstdayofweek(cal.startDate) - Day(1)
-    grid = mapfoldl(hcat, sunday:Week(1):cal.endDate) do sun
+    grid = mapfoldl(hcat, sunday:Week(1):cal.endDate, init=Array{Date, 2}(undef, 7, 0)) do sun
         sun:Day(1):(sun + Day(6))
     end
     (rows, cols) = size(grid)
@@ -48,6 +48,11 @@ function Base.show(io::IO, cal::VerticalCalendar)
                 push!(th_months, (col, m))
             end
         end
+    end
+    if isempty(th_months)
+        firstday = cal.startDate
+        push!(th_years, (1, year(firstday)))
+        push!(th_months, (1, ENGLISH.months_abbr[month(firstday)]))
     end
 
     cellwidth = cal.cell.size[1] + cal.cell.margin[1]
