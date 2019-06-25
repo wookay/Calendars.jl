@@ -23,7 +23,7 @@ struct VerticalCalendar
     end
     function VerticalCalendar()
         d = today()
-        VerticalCalendar(firstdayofmonth(d), lastdayofmonth(d), [DateSpan([d], :cyan)])
+        VerticalCalendar(firstdayofmonth(d), lastdayofmonth(d); datespans=[DateSpan([d], :cyan)])
     end
 end
 
