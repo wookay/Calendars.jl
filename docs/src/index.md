@@ -1,9 +1,6 @@
 # Calendars.jl 🗓
 
-|  **Build Status**                                               |
-|:---------------------------------------------------------------:|
-|  [![][travis-img]][travis-url]  [![][codecov-img]][codecov-url] |
-
+<https://github.com/wookay/Calendars.jl>
 
 ```julia
 julia> using Calendars
@@ -41,10 +38,3 @@ Wed    21 28  5 12 19 26  2  9 16 23 30  6 13 20 27  6 13 20
 Fri 16 23 30  7 14 21 28  4 11 18 25  1  8 15 22  1  8 15
     17 24  1  8 15 22 29  5 12 19 26  2  9 16 23  2  9 16
 ```
-
-
-[travis-img]: https://api.travis-ci.org/wookay/Calendars.jl.svg?branch=master
-[travis-url]: https://travis-ci.org/wookay/Calendars.jl
-
-[codecov-img]: https://codecov.io/gh/wookay/Calendars.jl/branch/master/graph/badge.svg
-[codecov-url]: https://codecov.io/gh/wookay/Calendars.jl/branch/master

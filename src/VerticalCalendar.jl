@@ -4,23 +4,50 @@ export VerticalCalendar, Date, DateSpan, Day
 
 using Dates: ENGLISH, DatePeriod, Date, Month, Week, Day, firstdayofmonth, lastdayofmonth, firstdayofweek, year, month, day, today
 
+"""
+```julia
+struct DateSpan
+    dates::Vector{Date}
+    color::Symbol
+end
+```
+"""
 struct DateSpan
     dates::Vector{Date}
     color::Symbol
 end
 
+"""
+    VerticalCalendar(startDate::Date,
+                     endDate::Date ;
+                     datespans::Vector{DateSpan}=DateSpan[],
+                     cell::NamedTuple{(:size, :margin)} = (size = (2, 1), margin = (1, 0)))
+
+
+    VerticalCalendar()
+
+```julia
 struct VerticalCalendar
     startDate::Date
     endDate::Date
     datespans::Vector{DateSpan}
     cell::NamedTuple{(:size, :margin)}
+end
+```
+"""
+struct VerticalCalendar
+    startDate::Date
+    endDate::Date
+    datespans::Vector{DateSpan}
+    cell::NamedTuple{(:size, :margin)}
+
     function VerticalCalendar(startDate::Date,
-                              endDate::Date
-                              ;
+                              endDate::Date ;
                               datespans::Vector{DateSpan}=DateSpan[],
                               cell::NamedTuple{(:size, :margin)} = (size = (2, 1), margin = (1, 0)))
         new(startDate, endDate, datespans, cell)
     end
+
     function VerticalCalendar()
         d = today()
         VerticalCalendar(firstdayofmonth(d), lastdayofmonth(d); datespans=[DateSpan([d], :cyan)])
