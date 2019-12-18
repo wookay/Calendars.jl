@@ -5,6 +5,8 @@
 |  [![][docs-latest-img]][docs-latest-url]  |  [![][travis-img]][travis-url]  |
 
 
+### VerticalCalendar
+
 ```julia
 julia> using Calendars
 
@@ -40,6 +42,14 @@ Wed    21 28  5 12 19 26  2  9 16 23 30  6 13 20 27  6 13 20
     15 22 29  6 13 20 27  3 10 17 24 31  7 14 21 28  7 14
 Fri 16 23 30  7 14 21 28  4 11 18 25  1  8 15 22  1  8 15
     17 24  1  8 15 22 29  5 12 19 26  2  9 16 23  2  9 16
+```
+
+### Times
+
+```julia
+using Calendars.Times
+
+Day(0.5) + Hour(0.5) + Minute(0.5) == Hour(12) + Minute(30) + Second(30)
 ```
 
 
