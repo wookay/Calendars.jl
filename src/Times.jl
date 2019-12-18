@@ -41,4 +41,8 @@ function Dates.Second(n::Float64)::Union{Period,CompoundPeriod}
     iszero(ms) ? Second(s) : Second(s) + Millisecond(round(Int, 1000ms))
 end
 
+function Base.isless(a::Union{Period,CompoundPeriod}, b::Union{Period,CompoundPeriod})
+    isless(Dates.toms(a), Dates.toms(b))
+end
+
 end # module Calendars.Times

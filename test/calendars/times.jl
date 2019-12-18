@@ -18,4 +18,7 @@ using Calendars.Times
 @test Day(0.5) == Hour(12)
 @test Day(25) == Day(24.5) + Hour(12)
 
+@test Minute(1) < Minute(1) + Second(2)
+@test Minute(1) + Second(1) < Minute(1) + Second(2)
+
 end # module test_calendars_times

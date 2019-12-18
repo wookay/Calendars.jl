@@ -47,4 +47,6 @@ Fri 16 23 30  7 14 21 28  4 11 18 25  1  8 15 22  1  8 15
 using Calendars.Times
 
 Day(0.5) + Hour(0.5) + Minute(0.5) == Hour(12) + Minute(30) + Second(30)
+
+Minute(1) + Second(1) < Minute(1) + Second(2)
 ```
