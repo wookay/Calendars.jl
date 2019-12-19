@@ -6,39 +6,48 @@ using Dates
 using .Dates: CompoundPeriod
 
 """
-         Times.Day(n::Float64)::Union{Period,CompoundPeriod}
+         Times.Day(n::Union{Rational,AbstractFloat})::CompoundPeriod
 """
-function Dates.Day(n::Float64)::Union{Period,CompoundPeriod}
+function Dates.Day(n::Union{Rational,AbstractFloat})::CompoundPeriod
     d = trunc(Int, n)
-    h = n - d
-    iszero(h) ? Day(d) : Day(d) + Hour(round(Int, 24h))
+    h = Hour(24(n - d))
+    h == Hour(24) ? Day(d + 1) : Day(d) + h
 end
 
 """
-         Times.Hour(n::Float64)::Union{Period,CompoundPeriod}
+         Times.Hour(n::Union{Rational,AbstractFloat})::CompoundPeriod
 """
-function Dates.Hour(n::Float64)::Union{Period,CompoundPeriod}
+function Dates.Hour(n::Union{Rational,AbstractFloat})::CompoundPeriod
     h = trunc(Int, n)
-    m = n - h
-    iszero(m) ? Hour(h) : Hour(h) + Minute(round(Int, 60m))
+    m = Minute(60(n - h))
+    m == Minute(60) ? Hour(h + 1) : Hour(h) + m
 end
 
 """
-         Times.Minute(n::Float64)::Union{Period,CompoundPeriod}
+         Times.Minute(n::Union{Rational,AbstractFloat})::CompoundPeriod
 """
-function Dates.Minute(n::Float64)::Union{Period,CompoundPeriod}
+function Dates.Minute(n::Union{Rational,AbstractFloat})::CompoundPeriod
     m = trunc(Int, n)
-    s = n - m
-    iszero(s) ? Minute(m) : Minute(m) + Second(round(Int, 60s))
+    s = Second(60(n - m))
+    s == Second(60) ? Minute(m + 1) : Minute(m) + s
 end
 
 """
-         Times.Second(n::Float64)::Union{Period,CompoundPeriod}
+         Times.Second(n::Union{Rational,AbstractFloat})::CompoundPeriod
 """
-function Dates.Second(n::Float64)::Union{Period,CompoundPeriod}
+function Dates.Second(n::Union{Rational,AbstractFloat})::CompoundPeriod
     s = trunc(Int, n)
-    ms = n - s
-    iszero(ms) ? Second(s) : Second(s) + Millisecond(round(Int, 1000ms))
+    ms = Millisecond(1000(n - s))
+    ms == Millisecond(1000) ? Second(s + 1) : Second(s) + ms
+end
+
+"""
+         Times.Millisecond(n::Union{Rational,AbstractFloat})::CompoundPeriod
+"""
+function Dates.Millisecond(n::Union{Rational,AbstractFloat})::CompoundPeriod
+    ms = trunc(Int, n)
+    ns = Nanosecond(round(Int, 1000_000(n - ms)))
+    ns == Nanosecond(1000_000) ? Millisecond(ms+1) : Millisecond(ms) + ns
 end
 
 function Base.isless(a::Union{Period,CompoundPeriod}, b::Union{Period,CompoundPeriod})

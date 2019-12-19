@@ -21,4 +21,9 @@ using Calendars.Times
 @test Minute(1) < Minute(1) + Second(2)
 @test Minute(1) + Second(1) < Minute(1) + Second(2)
 
+@test Hour(1//2) == Hour(0.5) == Minute(30)
+@test Hour(2//2) == Hour(3//3) == Minute(60)
+
+@test Hour(1/32) == Minute(1) + Second(52) + Millisecond(500)
+
 end # module test_calendars_times
