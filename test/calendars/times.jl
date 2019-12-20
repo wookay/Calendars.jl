@@ -26,4 +26,7 @@ using Calendars.Times
 
 @test Hour(1/32) == Minute(1) + Second(52) + Millisecond(500)
 
+@test millisecond2datetime(1566724237000) == DateTime("2019-08-25T09:10:37")
+@test datetime2millisecond(DateTime("2019-08-25T09:10:37")) == 1566724237000
+
 end # module test_calendars_times

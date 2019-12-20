@@ -1,6 +1,7 @@
 module Times # Calendars
 
 export Day, Hour, Minute, Second, Millisecond
+export DateTime, millisecond2datetime, datetime2millisecond
 
 using Dates
 using .Dates: CompoundPeriod
@@ -52,6 +53,21 @@ end
 
 function Base.isless(a::Union{Period,CompoundPeriod}, b::Union{Period,CompoundPeriod})
     isless(Dates.toms(a), Dates.toms(b))
+end
+
+"""
+         millisecond2datetime(millisecond::Int64)::DateTime
+"""
+function millisecond2datetime(millisecond::Int64)::DateTime
+    rata = Dates.UNIXEPOCH + millisecond
+    return DateTime(Dates.UTM(rata))
+end
+
+"""
+         datetime2millisecond(dt::DateTime)::Int64
+"""
+function datetime2millisecond(dt::DateTime)::Int64
+    Dates.value(dt) - Dates.UNIXEPOCH
 end
 
 end # module Calendars.Times
