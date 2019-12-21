@@ -1,7 +1,7 @@
 module Times # Calendars
 
-export Day, Hour, Minute, Second, Millisecond
-export DateTime, millisecond2datetime, datetime2millisecond
+export Day, Hour, Minute, Second, Millisecond, Nanosecond
+export DateTime, Date, Time, millisecond2datetime, datetime2millisecond
 
 using Dates
 using .Dates: CompoundPeriod
