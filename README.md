@@ -21,16 +21,16 @@ Wed  2  9 16 23 30  6 13 20 27  6 13 20 27
 Fri  4 11 18 25  1  8 15 22  1  8 15 22 29
      5 12 19 26  2  9 16 23  2  9 16 23 30
 
-julia> VerticalCalendar()
-    2019
-    Jun
-        2  9 16 23 30
-Mon     3 10 17 24
-        4 11 18 25
-Wed     5 12 19 26
-        6 13 20 27
-Fri     7 14 21 28
-     1  8 15 22 29
+julia> VerticalCalendar(Date(2020,1))
+    2020
+    Jan
+        5 12 19 26
+Mon     6 13 20 27
+        7 14 21 28
+Wed  1  8 15 22 29
+     2  9 16 23 30
+Fri  3 10 17 24 31
+     4 11 18 25
 
 julia> VerticalCalendar(Date(2018,11,15), Date(2019,3,20), datespans=[DateSpan(Date(2018,12,25):Day(1):Date(2019,1,2), :green)])
           2018           2019
@@ -44,6 +44,20 @@ Fri 16 23 30  7 14 21 28  4 11 18 25  1  8 15 22  1  8 15
     17 24  1  8 15 22 29  5 12 19 26  2  9 16 23  2  9 16
 ```
 
+
+### HorizontalCalendar
+
+```julia
+julia> using Calendars
+
+julia> HorizontalCalendar(Date(2020,1))
+     Su Mo Tu We Th Fr Sa
+Jan            1  2  3  4
+2020  5  6  7  8  9 10 11
+     12 13 14 15 16 17 18
+     19 20 21 22 23 24 25
+     26 27 28 29 30 31
+```
 
 ### Times
 
