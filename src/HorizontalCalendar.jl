@@ -4,6 +4,25 @@ export HorizontalCalendar
 
 using Dates: Dates
 
+"""
+    HorizontalCalendar(startDate::Date,
+                       endDate::Date ;
+                       datespans::Vector{DateSpan}=[DateSpan([today()], :cyan)],
+                       cell::NamedTuple{(:size, :margin)} = (size = (2, 1), margin = (1, 0)))
+
+    HorizontalCalendar(d::Date)
+
+    HorizontalCalendar()
+
+```julia
+struct HorizontalCalendar
+    startDate::Date
+    endDate::Date
+    datespans::Vector{DateSpan}
+    cell::NamedTuple{(:size, :margin)}
+end
+```
+"""
 struct HorizontalCalendar
     startDate::Date
     endDate::Date
@@ -12,19 +31,17 @@ struct HorizontalCalendar
 
     function HorizontalCalendar(startDate::Date,
                               endDate::Date ;
-                              datespans::Vector{DateSpan}=DateSpan[],
+                              datespans::Vector{DateSpan}=[DateSpan([today()], :cyan)],
                               cell::NamedTuple{(:size, :margin)} = (size = (2, 1), margin = (1, 0)))
         new(startDate, endDate, datespans, cell)
     end
 
     function HorizontalCalendar(d::Date)
-        d_today = today()
-        HorizontalCalendar(firstdayofmonth(d), lastdayofmonth(d); datespans=[DateSpan([d_today], :cyan)])
+        HorizontalCalendar(firstdayofmonth(d), lastdayofmonth(d))
     end
 
     function HorizontalCalendar()
-        d = d_today = today()
-        HorizontalCalendar(firstdayofmonth(d), lastdayofmonth(d); datespans=[DateSpan([d_today], :cyan)])
+        HorizontalCalendar(today())
     end
 end
 

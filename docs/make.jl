@@ -1,11 +1,13 @@
 using Documenter
 using Calendars
 using .Calendars.Times
+using .Calendars.LunarCalendars
 
 makedocs(
     build = joinpath(@__DIR__, "local" in ARGS ? "build_local" : "build"),
     modules = [Calendars,
                Calendars.Times,
+               Calendars.LunarCalendars,
               ],
     clean = false,
     format = Documenter.HTML(
@@ -17,6 +19,8 @@ makedocs(
     pages = Any[
         "Home" => "index.md",
         "VerticalCalendar" => "VerticalCalendar.md",
+        "HorizontalCalendar" => "HorizontalCalendar.md",
         "Times" => "Times.md",
+        "LunarCalendars" => "LunarCalendars.md",
     ],
 )

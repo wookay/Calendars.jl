@@ -4,6 +4,16 @@ export Lunar, Date, lunar_to_solar, solar_to_lunar
 
 using Dates
 
+"""
+```julia
+struct Lunar
+    year
+    month
+    day
+    isleap::Bool
+end
+```
+"""
 struct Lunar
     year
     month
@@ -188,14 +198,23 @@ module Converter # Calendars.LunarCalendars
 end # module Calendars.LunarCalendars.Converter
 
 
+"""
+         lunar_to_solar(lunar::Lunar)::Date
+"""
 function lunar_to_solar(lunar::Lunar)::Date
     Converter.Lunar2Solar(lunar)
 end
 
+"""
+         solar_to_lunar(solar::Date)::Lunar
+"""
 function solar_to_lunar(solar::Date)::Lunar
     Converter.Solar2Lunar(solar)
 end
 
+"""
+         Lunar(solar::Date)::Lunar
+"""
 function Lunar(solar::Date)::Lunar
     solar_to_lunar(solar)
 end

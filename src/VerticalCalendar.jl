@@ -20,9 +20,10 @@ end
 """
     VerticalCalendar(startDate::Date,
                      endDate::Date ;
-                     datespans::Vector{DateSpan}=DateSpan[],
+                     datespans::Vector{DateSpan}=[DateSpan([today()], :cyan)],
                      cell::NamedTuple{(:size, :margin)} = (size = (2, 1), margin = (1, 0)))
 
+    VerticalCalendar(d::Date)
 
     VerticalCalendar()
 
@@ -43,19 +44,17 @@ struct VerticalCalendar
 
     function VerticalCalendar(startDate::Date,
                               endDate::Date ;
-                              datespans::Vector{DateSpan}=DateSpan[],
+                              datespans::Vector{DateSpan}=[DateSpan([today()], :cyan)],
                               cell::NamedTuple{(:size, :margin)} = (size = (2, 1), margin = (1, 0)))
         new(startDate, endDate, datespans, cell)
     end
 
     function VerticalCalendar(d::Date)
-        d_today = today()
-        VerticalCalendar(firstdayofmonth(d), lastdayofmonth(d); datespans=[DateSpan([d_today], :cyan)])
+        VerticalCalendar(firstdayofmonth(d), lastdayofmonth(d))
     end
 
     function VerticalCalendar()
-        d = d_today = today()
-        VerticalCalendar(firstdayofmonth(d), lastdayofmonth(d); datespans=[DateSpan([d_today], :cyan)])
+        VerticalCalendar(today())
     end
 end
 
