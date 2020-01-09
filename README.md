@@ -1,8 +1,8 @@
 # Calendars.jl 🗓
 
-|  **Documentation**                        |  **Build Status**               |
-|:------------------------------------------|---------------------------------|
-|  [![][docs-latest-img]][docs-latest-url]  |  [![][travis-img]][travis-url]  |
+|  **Documentation**                        |  **Build Status**                 |
+|:------------------------------------------|-----------------------------------|
+|  [![][docs-latest-img]][docs-latest-url]  |  [![][actions-img]][actions-url]  |
 
 
 ### VerticalCalendar
@@ -58,5 +58,5 @@ Minute(1) + Second(1) < Minute(1) + Second(2)
 [docs-latest-img]: https://img.shields.io/badge/docs-latest-blue.svg
 [docs-latest-url]: https://wookay.github.io/docs/Calendars.jl/
 
-[travis-img]: https://api.travis-ci.org/wookay/Calendars.jl.svg?branch=master
-[travis-url]: https://travis-ci.org/wookay/Calendars.jl
+[actions-img]: https://github.com/wookay/Calendars.jl/workflows/CI/badge.svg
+[actions-url]: https://github.com/wookay/Calendars.jl/actions
