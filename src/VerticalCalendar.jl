@@ -1,21 +1,8 @@
 # module Calendars
 
-export VerticalCalendar, Date, DateSpan, Day
+export VerticalCalendar
 
-using Dates: ENGLISH, DatePeriod, Date, Month, Week, Day, firstdayofmonth, lastdayofmonth, firstdayofweek, year, month, day, today
-
-"""
-```julia
-struct DateSpan
-    dates::Vector{Date}
-    color::Symbol
-end
-```
-"""
-struct DateSpan
-    dates::Vector{Date}
-    color::Symbol
-end
+using Dates: ENGLISH, DatePeriod, Month, Week, firstdayofmonth, firstdayofweek, year, month, day, today
 
 """
     VerticalCalendar(startDate::Date,

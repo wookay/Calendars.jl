@@ -2,8 +2,6 @@
 
 export HorizontalCalendar
 
-using Dates: Dates
-
 """
     HorizontalCalendar(startDate::Date,
                        endDate::Date ;
