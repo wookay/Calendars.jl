@@ -48,9 +48,14 @@ struct VerticalCalendar
         new(startDate, endDate, datespans, cell)
     end
 
+    function VerticalCalendar(d::Date)
+        d_today = today()
+        VerticalCalendar(firstdayofmonth(d), lastdayofmonth(d); datespans=[DateSpan([d_today], :cyan)])
+    end
+
     function VerticalCalendar()
-        d = today()
-        VerticalCalendar(firstdayofmonth(d), lastdayofmonth(d); datespans=[DateSpan([d], :cyan)])
+        d = d_today = today()
+        VerticalCalendar(firstdayofmonth(d), lastdayofmonth(d); datespans=[DateSpan([d_today], :cyan)])
     end
 end
 
