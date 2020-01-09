@@ -44,6 +44,7 @@ Fri 16 23 30  7 14 21 28  4 11 18 25  1  8 15 22  1  8 15
     17 24  1  8 15 22 29  5 12 19 26  2  9 16 23  2  9 16
 ```
 
+
 ### Times
 
 ```julia
@@ -52,6 +53,21 @@ using Calendars.Times
 Day(0.5) + Hour(0.5) + Minute(0.5) == Hour(12) + Minute(30) + Second(30)
 
 Minute(1) + Second(1) < Minute(1) + Second(2)
+```
+
+
+### LunarCalendars
+
+ * Based on wolfhong's [LunarCalendar converter.py](https://github.com/wolfhong/LunarCalendar/blob/master/lunarcalendar/converter.py)
+
+```julia
+julia> using Calendars.LunarCalendars
+
+julia> Lunar(Date(2020, 4, 23))
+Lunar(2020, 4, 1, false)
+
+julia> Lunar(Date(2020, 5, 23))
+Lunar(2020, 4, 1, true)
 ```
 
 
