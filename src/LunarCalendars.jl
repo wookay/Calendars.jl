@@ -1,23 +1,24 @@
 module LunarCalendars # Calendars
 
-export Lunar, Date, lunar_to_solar, solar_to_lunar
+export Lunar, lunar_to_solar, solar_to_lunar
+export Date, today
 
-using Dates
+using Dates: Dates, Date, today, year, month, day
 
 """
 ```julia
 struct Lunar
-    year
-    month
-    day
+    year::Int
+    month::Int
+    day::Int
     isleap::Bool
 end
 ```
 """
 struct Lunar
-    year
-    month
-    day
+    year::Int
+    month::Int
+    day::Int
     isleap::Bool
 end
 
@@ -217,6 +218,13 @@ end
 """
 function Lunar(solar::Date)::Lunar
     solar_to_lunar(solar)
+end
+
+"""
+         Date(lunar::Lunar)::Date
+"""
+function Dates.Date(lunar::Lunar)::Date
+    lunar_to_solar(lunar)
 end
 
 end # Calendars.LunarCalendars
