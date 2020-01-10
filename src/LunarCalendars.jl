@@ -148,28 +148,23 @@ module Converter # Calendars.LunarCalendars
 
         return SolarFromInt(SolarToInt(y, m, d) + offset - 1)
     end
-
     function Solar2Lunar(solar::Date)::Lunar
-        lunar = Dict(:year => 0,
-                     :month => 0,
-                     :day => 0,
-                     :isleap => false)
-        index = year(solar) - Converter.solar_1_1[1]
+        index = year(solar) - Converter.solar_1_1[1] + 1
         data = (year(solar) << 9) | (month(solar) << 5) | day(solar)
         if Converter.solar_1_1[index] > data
             index -= 1
         end
 
-        solar11 = Converter.solar_1_1[index + 1]
+        solar11 = Converter.solar_1_1[index]
         y = GetBitInt(solar11, 12, 9)
         m = GetBitInt(solar11, 4, 5)
         d = GetBitInt(solar11, 5, 0)
         offset = SolarToInt(year(solar), month(solar), day(solar)) - SolarToInt(y, m, d)
 
-        days = Converter.lunar_month_days[index + 1]
+        days = Converter.lunar_month_days[index]
         leap = GetBitInt(days, 4, 13)
 
-        lunarY = index + Converter.solar_1_1[1]
+        lunarY = index + Converter.solar_1_1[1] - 1
         lunarM = 1
         offset += 1
 
@@ -183,18 +178,16 @@ module Converter # Calendars.LunarCalendars
             end
         end
 
+        lunarL = false
         lunarD = offset
-        lunar[:year] = lunarY
-        lunar[:month] = lunarM
-        lunar[:day] = lunarD
-        lunar[:isleap] = false
+ 
         if leap != 0 && lunarM > leap
-            lunar[:month] = lunarM - 1
             if lunarM == leap + 1
-                lunar[:isleap] = true
+                lunarL = true
             end
+            lunarM -= 1
         end
-        return Lunar(lunar[:year], lunar[:month], lunar[:day], lunar[:isleap])
+        return Lunar(lunarY, lunarM, lunarD, lunarL)
     end
 end # module Calendars.LunarCalendars.Converter
 
