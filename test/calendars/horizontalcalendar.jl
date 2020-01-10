@@ -21,7 +21,7 @@ Mar   1  2  3  4  5  6  7
      22 23 24 25 26 27 28
      29 30 31            """
 
-jantomar = HorizontalCalendar(Date(2020,1,1), Date(2020,3,31))
+jantomar = HorizontalCalendar(Date(2020,1,1), Date(2020,3,lastdayofmonth))
 @test sprint(show, jantomar) == """
      Su Mo Tu We Th Fr Sa
 Jan            1  2  3  4
