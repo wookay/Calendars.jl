@@ -4,7 +4,7 @@ export DateSpan
 export       Date, Year, Month, Week, Day, lastdayofmonth, today
 using Dates: Date, Year, Month, Week, Day, lastdayofmonth, today
 
-using Dates: Dates, firstdayofyear, lastdayofyear, firstdayofmonth, firstdayofweek, lastdayofweek, dayofweek
+using Dates: Dates, firstdayofyear, lastdayofyear, firstdayofmonth, firstdayofweek, lastdayofweek, dayofweek, monthabbr, dayabbr, year, month, day
 
 """
 ```julia
@@ -29,8 +29,9 @@ abstract type CalendarWall end
 function (::Type{T})(startDate::Date,
                      endDate::Date ;
                      datespans::Vector{DateSpan}=[DateSpan([today()], :cyan)],
-                     cell::NamedTuple{(:size, :margin)} = (size = (2, 1), margin = (1, 0))) where {T <: CalendarWall}
-    T(startDate, endDate, datespans, cell)
+                     cell::NamedTuple{(:size, :margin)} = (size = (2, 1), margin = (1, 0)),
+                     locale::AbstractString="english") where {T <: CalendarWall}
+    T(startDate, endDate, datespans, cell, locale)
 end
 
 function (::Type{T})(y::Year; kwargs...) where {T <: CalendarWall}
@@ -69,13 +70,39 @@ function (::Type{T})(date::Date; kwargs...) where {T <: CalendarWall}
     T(firstdayofmonth(date), lastdayofmonth(date); kwargs...)
 end
 
-function (::Type{T})() where {T <: CalendarWall}
-    T(today())
+function (::Type{T})(; kwargs...) where {T <: CalendarWall}
+    T(today(); kwargs...)
 end
 
 
 function Dates.Date(y::Int, m::Int, ::typeof(lastdayofmonth))::Date
     lastdayofmonth(Date(y, m))
+end
+
+const KOREAN = Dates.DateLocale(
+    split("일월 이월 삼월 사월 오월 유월 칠월 팔월 구월 시월 십일월 십이월", ' '),
+    split("1월 2월 3월 4월 5월 6월 7월 8월 9월 10월 11월 12월", ' '),
+    split("월요일 화요일 수요일 목요일 금요일 토요일 일요일", ' '),
+    split("월 화 수 목 금 토 일", ' '),
+)
+
+const CHINESE = Dates.DateLocale(
+    split("一月 二月 三月 四月 五月 六月 七月 八月 九月 十月 十一月 十二月", ' '),
+    split("1月 2月 3月 4月 5月 6月 7月 8月 9月 10月 11月 12月", ' '),
+    split("星期一 星期二 星期三 星期四 星期五 星期六 星期日", ' '),
+    split("一 二 三 四 五 六 日", ' '),
+)
+
+function __init__()
+    merge!(Dates.LOCALES, Dict(
+        "korean" => KOREAN,
+        "chinese" => CHINESE,
+    ))
+end
+
+function dayabbrshort(day::Integer; locale::AbstractString="english")
+    abbr = dayabbr.(Dates.Mon:Dates.Sun, locale=locale)[day]
+    length(abbr) > 2 ? SubString(abbr, 1, 2) : abbr
 end
 
 # module Calendars

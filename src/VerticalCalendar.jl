@@ -2,13 +2,12 @@
 
 export VerticalCalendar
 
-using Dates: ENGLISH, DatePeriod, Month, Week, firstdayofmonth, firstdayofweek, year, month, day, today
-
 """
     VerticalCalendar(startDate::Date,
                      endDate::Date ;
                      datespans::Vector{DateSpan}=[DateSpan([today()], :cyan)],
-                     cell::NamedTuple{(:size, :margin)} = (size = (2, 1), margin = (1, 0)))
+                     cell::NamedTuple{(:size, :margin)} = (size = (2, 1), margin = (1, 0)),
+                     locale::AbstractString="english")
 
     VerticalCalendar(y::Year)
 
@@ -28,6 +27,7 @@ struct VerticalCalendar <: CalendarWall
     endDate::Date
     datespans::Vector{DateSpan}
     cell::NamedTuple{(:size, :margin)}
+    locale::String
 end
 ```
 """
@@ -36,6 +36,7 @@ struct VerticalCalendar <: CalendarWall
     endDate::Date
     datespans::Vector{DateSpan}
     cell::NamedTuple{(:size, :margin)}
+    locale::String
 end
 
 function Base.show(io::IO, cal::VerticalCalendar)
@@ -51,14 +52,14 @@ function Base.show(io::IO, cal::VerticalCalendar)
     th_years = []
     th_months = []
     daysofweek = Dict(map([2, 4, 6]) do nth
-        (nth, ENGLISH.days_of_week_abbr[nth-1])
+        (nth, dayabbr(nth - 1; locale=cal.locale))
     end)
     for col in 1:cols
         nth = findfirst(d -> day(d) == 1, grid[:, col])
         if nth !== nothing
             firstday = grid[:, col][nth]
             if cal.startDate <= firstday <= cal.endDate
-                m = ENGLISH.months_abbr[month(firstday)]
+                m = monthabbr(month(firstday), locale=cal.locale)
                 push!(th_years, (col, year(firstday)))
                 push!(th_months, (col, m))
             end
@@ -66,8 +67,9 @@ function Base.show(io::IO, cal::VerticalCalendar)
     end
     if isempty(th_months)
         firstday = cal.startDate
+        m = monthabbr(month(firstday), locale=cal.locale)
         push!(th_years, (1, year(firstday)))
-        push!(th_months, (1, ENGLISH.months_abbr[month(firstday)]))
+        push!(th_months, (1, m))
     end
 
     cellwidth = cal.cell.size[1] + cal.cell.margin[1]
@@ -95,10 +97,11 @@ function Base.show(io::IO, cal::VerticalCalendar)
     diff = 3 - cellwidth
     diff < 0 && (diff = 0)
     print(io, repeat(' ', leftside + diff))
-    for (idx, (col, month)) in enumerate(th_months)
+    for (idx, (col, m)) in enumerate(th_months)
         n = cellwidth * (col - prev_col - 1) - diff
         print(io, repeat(' ', n))
-        print(io, rpad(month, cellwidth, ' '))
+        monthtext = string(m, repeat(' ', clamp(cellwidth - (textwidth(m)), 0, cellwidth)))
+        print(io, monthtext)
         prev_col = col
     end
     println(io)
@@ -109,7 +112,9 @@ function Base.show(io::IO, cal::VerticalCalendar)
     end
     for row in 1:rows
         if haskey(daysofweek, row)
-            print(io, daysofweek[row], ' ')
+            val = daysofweek[row]
+            leftsidetext = string(val, repeat(' ', leftside - (textwidth(val))))
+            print(io, leftsidetext)
         else
             print(io, repeat(' ', leftside))
         end
