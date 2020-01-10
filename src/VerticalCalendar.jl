@@ -10,12 +10,20 @@ using Dates: ENGLISH, DatePeriod, Month, Week, firstdayofmonth, firstdayofweek, 
                      datespans::Vector{DateSpan}=[DateSpan([today()], :cyan)],
                      cell::NamedTuple{(:size, :margin)} = (size = (2, 1), margin = (1, 0)))
 
-    VerticalCalendar(d::Date)
+    VerticalCalendar(y::Year)
+
+    VerticalCalendar(m::Month, date::Date=today())
+
+    VerticalCalendar(w::Week, date::Date=today())
+
+    VerticalCalendar(d::Day, date::Date=today())
+
+    VerticalCalendar(date::Date)
 
     VerticalCalendar()
 
 ```julia
-struct VerticalCalendar
+struct VerticalCalendar <: CalendarWall
     startDate::Date
     endDate::Date
     datespans::Vector{DateSpan}
@@ -23,30 +31,19 @@ struct VerticalCalendar
 end
 ```
 """
-struct VerticalCalendar
+struct VerticalCalendar <: CalendarWall
     startDate::Date
     endDate::Date
     datespans::Vector{DateSpan}
     cell::NamedTuple{(:size, :margin)}
-
-    function VerticalCalendar(startDate::Date,
-                              endDate::Date ;
-                              datespans::Vector{DateSpan}=[DateSpan([today()], :cyan)],
-                              cell::NamedTuple{(:size, :margin)} = (size = (2, 1), margin = (1, 0)))
-        new(startDate, endDate, datespans, cell)
-    end
-
-    function VerticalCalendar(d::Date)
-        VerticalCalendar(firstdayofmonth(d), lastdayofmonth(d))
-    end
-
-    function VerticalCalendar()
-        VerticalCalendar(today())
-    end
 end
 
 function Base.show(io::IO, cal::VerticalCalendar)
-    sunday = firstdayofweek(cal.startDate) - Day(1)
+    if Dates.Sun == dayofweek(cal.startDate)
+        sunday = cal.startDate
+    else
+        sunday = firstdayofweek(cal.startDate) - Day(1)
+    end
     grid = mapfoldl(hcat, sunday:Week(1):cal.endDate, init=Array{Date, 2}(undef, 7, 0)) do sun
         sun:Day(1):(sun + Day(6))
     end

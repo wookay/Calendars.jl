@@ -8,12 +8,20 @@ export HorizontalCalendar
                        datespans::Vector{DateSpan}=[DateSpan([today()], :cyan)],
                        cell::NamedTuple{(:size, :margin)} = (size = (2, 1), margin = (1, 0)))
 
-    HorizontalCalendar(d::Date)
+    HorizontalCalendar(y::Year)
+
+    HorizontalCalendar(m::Month, date::Date=today())
+
+    HorizontalCalendar(w::Week, date::Date=today())
+
+    HorizontalCalendar(d::Day, date::Date=today())
+
+    HorizontalCalendar(date::Date)
 
     HorizontalCalendar()
 
 ```julia
-struct HorizontalCalendar
+struct HorizontalCalendar <: CalendarWall
     startDate::Date
     endDate::Date
     datespans::Vector{DateSpan}
@@ -21,30 +29,19 @@ struct HorizontalCalendar
 end
 ```
 """
-struct HorizontalCalendar
+struct HorizontalCalendar <: CalendarWall
     startDate::Date
     endDate::Date
     datespans::Vector{DateSpan}
     cell::NamedTuple{(:size, :margin)}
-
-    function HorizontalCalendar(startDate::Date,
-                              endDate::Date ;
-                              datespans::Vector{DateSpan}=[DateSpan([today()], :cyan)],
-                              cell::NamedTuple{(:size, :margin)} = (size = (2, 1), margin = (1, 0)))
-        new(startDate, endDate, datespans, cell)
-    end
-
-    function HorizontalCalendar(d::Date)
-        HorizontalCalendar(firstdayofmonth(d), lastdayofmonth(d))
-    end
-
-    function HorizontalCalendar()
-        HorizontalCalendar(today())
-    end
 end
 
 function Base.show(io::IO, cal::HorizontalCalendar)
-    sunday = firstdayofweek(cal.startDate) - Day(1)
+    if Dates.Sun == dayofweek(cal.startDate)
+        sunday = cal.startDate
+    else
+        sunday = firstdayofweek(cal.startDate) - Day(1)
+    end
     grid = mapfoldl(vcat, collect(sunday:Week(1):cal.endDate), init=Array{Date, 2}(undef, 0, 7)) do sun
         reshape(sun:Day(1):(sun + Day(6)), (1, 7))
     end
