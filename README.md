@@ -5,6 +5,15 @@
 |  [![][docs-latest-img]][docs-latest-url]  |  [![][actions-img]][actions-url]  |
 
 
+### Install
+
+`julia>` type `]` key
+
+```julia
+(v1.3) pkg> add https://github.com/wookay/Calendars.jl.git
+```
+
+
 ### VerticalCalendar
 
 ```julia
