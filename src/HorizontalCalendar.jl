@@ -1,44 +1,5 @@
 # module Calendars
 
-export HorizontalCalendar
-
-"""
-    HorizontalCalendar(startDate::Date,
-                       endDate::Date ;
-                       datespans::Vector{DateSpan}=[DateSpan([today()], :cyan)],
-                       cell::NamedTuple{(:size, :margin)} = (size = (2, 1), margin = (1, 0)),
-                       locale::AbstractString="english")
-
-    HorizontalCalendar(y::Year)
-
-    HorizontalCalendar(m::Month, date::Date=today())
-
-    HorizontalCalendar(w::Week, date::Date=today())
-
-    HorizontalCalendar(d::Day, date::Date=today())
-
-    HorizontalCalendar(date::Date)
-
-    HorizontalCalendar()
-
-```julia
-struct HorizontalCalendar <: CalendarWall
-    startDate::Date
-    endDate::Date
-    datespans::Vector{DateSpan}
-    cell::NamedTuple{(:size, :margin)}
-    locale::String
-end
-```
-"""
-struct HorizontalCalendar <: CalendarWall
-    startDate::Date
-    endDate::Date
-    datespans::Vector{DateSpan}
-    cell::NamedTuple{(:size, :margin)}
-    locale::String
-end
-
 function Base.show(io::IO, cal::HorizontalCalendar)
     if Dates.Sun == dayofweek(cal.startDate)
         sunday = cal.startDate

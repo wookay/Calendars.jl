@@ -1,6 +1,5 @@
 # module Calendars
 
-export DateSpan
 export       Date, Year, Month, Week, Day, lastdayofmonth, today
 using Dates: Date, Year, Month, Week, Day, lastdayofmonth, today
 
@@ -19,12 +18,81 @@ struct DateSpan
     color::Symbol
 end
 
-function Base.:(==)(a::DateSpan, b::DateSpan)
-    a.dates == b.dates &&
-    a.color == b.color
+abstract type CalendarWall end
+
+"""
+    VerticalCalendar(startDate::Date,
+                     endDate::Date ;
+                     datespans::Vector{DateSpan}=[DateSpan([today()], :cyan)],
+                     cell::NamedTuple{(:size, :margin)} = (size = (2, 1), margin = (1, 0)),
+                     locale::AbstractString="english")
+
+    VerticalCalendar(y::Year)
+
+    VerticalCalendar(m::Month, date::Date=today())
+
+    VerticalCalendar(w::Week, date::Date=today())
+
+    VerticalCalendar(d::Day, date::Date=today())
+
+    VerticalCalendar(date::Date)
+
+    VerticalCalendar()
+
+```julia
+struct VerticalCalendar <: CalendarWall
+    startDate::Date
+    endDate::Date
+    datespans::Vector{DateSpan}
+    cell::NamedTuple{(:size, :margin)}
+    locale::String
+end
+```
+"""
+struct VerticalCalendar <: CalendarWall
+    startDate::Date
+    endDate::Date
+    datespans::Vector{DateSpan}
+    cell::NamedTuple{(:size, :margin)}
+    locale::String
 end
 
-abstract type CalendarWall end
+"""
+    HorizontalCalendar(startDate::Date,
+                       endDate::Date ;
+                       datespans::Vector{DateSpan}=[DateSpan([today()], :cyan)],
+                       cell::NamedTuple{(:size, :margin)} = (size = (2, 1), margin = (1, 0)),
+                       locale::AbstractString="english")
+
+    HorizontalCalendar(y::Year)
+
+    HorizontalCalendar(m::Month, date::Date=today())
+
+    HorizontalCalendar(w::Week, date::Date=today())
+
+    HorizontalCalendar(d::Day, date::Date=today())
+
+    HorizontalCalendar(date::Date)
+
+    HorizontalCalendar()
+
+```julia
+struct HorizontalCalendar <: CalendarWall
+    startDate::Date
+    endDate::Date
+    datespans::Vector{DateSpan}
+    cell::NamedTuple{(:size, :margin)}
+    locale::String
+end
+```
+"""
+struct HorizontalCalendar <: CalendarWall
+    startDate::Date
+    endDate::Date
+    datespans::Vector{DateSpan}
+    cell::NamedTuple{(:size, :margin)}
+    locale::String
+end
 
 function (::Type{T})(startDate::Date,
                      endDate::Date ;
@@ -72,6 +140,22 @@ end
 
 function (::Type{T})(; kwargs...) where {T <: CalendarWall}
     T(today(); kwargs...)
+end
+
+function Base.adjoint(cal::VerticalCalendar)::HorizontalCalendar
+    HorizontalCalendar(getfield.(Ref(cal), fieldnames(HorizontalCalendar))...)
+end
+
+function Base.adjoint(cal::HorizontalCalendar)::VerticalCalendar
+    VerticalCalendar(getfield.(Ref(cal), fieldnames(VerticalCalendar))...)
+end
+
+function Base.:(==)(a::T, b::T) where {T <: CalendarWall}
+    getfield.(Ref(a), fieldnames(T)) == getfield.(Ref(b), fieldnames(T))
+end
+
+function Base.:(==)(a::T, b::T) where {T <: DateSpan}
+    getfield.(Ref(a), fieldnames(T)) == getfield.(Ref(b), fieldnames(T))
 end
 
 

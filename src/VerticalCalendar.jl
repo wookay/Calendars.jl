@@ -1,44 +1,5 @@
 # module Calendars
 
-export VerticalCalendar
-
-"""
-    VerticalCalendar(startDate::Date,
-                     endDate::Date ;
-                     datespans::Vector{DateSpan}=[DateSpan([today()], :cyan)],
-                     cell::NamedTuple{(:size, :margin)} = (size = (2, 1), margin = (1, 0)),
-                     locale::AbstractString="english")
-
-    VerticalCalendar(y::Year)
-
-    VerticalCalendar(m::Month, date::Date=today())
-
-    VerticalCalendar(w::Week, date::Date=today())
-
-    VerticalCalendar(d::Day, date::Date=today())
-
-    VerticalCalendar(date::Date)
-
-    VerticalCalendar()
-
-```julia
-struct VerticalCalendar <: CalendarWall
-    startDate::Date
-    endDate::Date
-    datespans::Vector{DateSpan}
-    cell::NamedTuple{(:size, :margin)}
-    locale::String
-end
-```
-"""
-struct VerticalCalendar <: CalendarWall
-    startDate::Date
-    endDate::Date
-    datespans::Vector{DateSpan}
-    cell::NamedTuple{(:size, :margin)}
-    locale::String
-end
-
 function Base.show(io::IO, cal::VerticalCalendar)
     if Dates.Sun == dayofweek(cal.startDate)
         sunday = cal.startDate
