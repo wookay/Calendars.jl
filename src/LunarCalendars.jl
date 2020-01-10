@@ -214,6 +214,13 @@ function Lunar(solar::Date)::Lunar
 end
 
 """
+         Lunar(::typeof(today))::Lunar
+"""
+function Lunar(::typeof(today))::Lunar
+    solar_to_lunar(today())
+end
+
+"""
          Date(lunar::Lunar)::Date
 """
 function Dates.Date(lunar::Lunar)::Date
