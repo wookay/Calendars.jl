@@ -51,6 +51,7 @@ Wed    21 28  5 12 19 26  2  9 16 23 30  6 13 20 27  6 13 20
     15 22 29  6 13 20 27  3 10 17 24 31  7 14 21 28  7 14
 Fri 16 23 30  7 14 21 28  4 11 18 25  1  8 15 22  1  8 15
     17 24  1  8 15 22 29  5 12 19 26  2  9 16 23  2  9 16
+
 ```
 
 
@@ -59,14 +60,24 @@ Fri 16 23 30  7 14 21 28  4 11 18 25  1  8 15 22  1  8 15
 ```julia
 julia> using Calendars
 
-julia> HorizontalCalendar(Date(2020,1))
+julia> HorizontalCalendar(Date(2020,7))
      Su Mo Tu We Th Fr Sa
-Jan            1  2  3  4
+Jul            1  2  3  4
 2020  5  6  7  8  9 10 11
      12 13 14 15 16 17 18
      19 20 21 22 23 24 25
      26 27 28 29 30 31
+
+julia> HorizontalCalendar(Date(2020, 7), datespans=[DateSpan(Date(2020,7,27):Day(1):Date(2020,7,31), :green)])
+     Su Mo Tu We Th Fr Sa
+Jul            1  2  3  4
+2020  5  6  7  8  9 10 11
+     12 13 14 15 16 17 18
+     19 20 21 22 23 24 25
+     26 27 28 29 30 31
+
 ```
+
 
 ### Times
 
@@ -91,6 +102,7 @@ Lunar(2020, 4, 1, false)
 
 julia> Lunar(Date(2020, 5, 23))
 Lunar(2020, 4, 1, true)
+
 ```
 
 
