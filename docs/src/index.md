@@ -3,14 +3,7 @@
 <https://github.com/wookay/Calendars.jl>
 
 
-### Install
-
-`julia>` type `]` key
-
-```julia
-(v1.3) pkg> add https://github.com/wookay/Calendars.jl.git
-```
-
+![repl.svg](https://wookay.github.io/docs/Calendars.jl/assets/calendars/repl.svg)
 
 ### VerticalCalendar
 
@@ -98,4 +91,13 @@ Lunar(2020, 4, 1, false)
 julia> Lunar(Date(2020, 5, 23))
 Lunar(2020, 4, 1, true)
 
+```
+
+
+### Install
+
+`julia>` type `]` key
+
+```julia
+(v1.3) pkg> add https://github.com/wookay/Calendars.jl.git
 ```
