@@ -51,8 +51,7 @@ function Dates.Millisecond(n::Union{Rational,AbstractFloat})::CompoundPeriod
     ns == Nanosecond(1000_000) ? Millisecond(ms+1) : Millisecond(ms) + ns
 end
 
-Dates.value(x::Dates.CompoundPeriod) = sum(Dates.value.(x.periods))
-Base.isless(x::Union{Period,Dates.CompoundPeriod}, y::Union{Period,Dates.CompoundPeriod}) = isless(Dates.value(x), Dates.value(y))
+Base.isless(x::Union{Period,Dates.CompoundPeriod}, y::Union{Period,Dates.CompoundPeriod}) = isless(Dates.tons(x), Dates.tons(y))
 
 """
          millisecond2datetime(millisecond::Int64)::DateTime

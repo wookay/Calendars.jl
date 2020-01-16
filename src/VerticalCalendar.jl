@@ -67,7 +67,7 @@ function Base.show(io::IO, cal::VerticalCalendar)
     end
     println(io)
 
-    colormap = Dict{Date,Symbol}()
+    colormap = Dict{Date,Union{Int,Symbol}}()
     for span in cal.datespans, date in span.dates
         colormap[date] = span.color
     end

@@ -44,7 +44,7 @@ function Base.show(io::IO, cal::HorizontalCalendar)
     println(io)
 
     prev_year = nothing
-    colormap = Dict{Date,Symbol}()
+    colormap = Dict{Date,Union{Int,Symbol}}()
     for span in cal.datespans, date in span.dates
         colormap[date] = span.color
     end

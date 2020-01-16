@@ -15,7 +15,7 @@ end
 """
 struct DateSpan
     dates::Vector{Date}
-    color::Symbol
+    color::Union{Int,Symbol}
 end
 
 abstract type CalendarWall end

@@ -2,6 +2,7 @@ module test_calendars_times
 
 using Test
 using Calendars.Times
+using Dates
 
 @test (Hour(1) + Minute(30)) == Hour(1.5)
 @test (Minute(1) + Second(30)) == Minute(1.5)
@@ -25,6 +26,13 @@ using Calendars.Times
 @test Hour(2//2) == Hour(3//3) == Minute(60)
 
 @test Hour(1/32) == Minute(1) + Second(52) + Millisecond(500)
+
+@test Week(1) + Day(1) > Day(3)
+@test Week(1) + Day(1) == Day(8)
+@test Week(1) + Day(10) < Week(9)
+
+@test Millisecond(1_000) == Second(1)
+@test Nanosecond(1_000_000) == Microsecond(1_000) == Millisecond(1)
 
 @test millisecond2datetime(1566724237000) == DateTime("2019-08-25T09:10:37")
 @test datetime2millisecond(DateTime("2019-08-25T09:10:37")) == 1566724237000
