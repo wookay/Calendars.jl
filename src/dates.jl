@@ -1,7 +1,7 @@
 # module Calendars
 
-export       Date, Year, Month, Week, Day, lastdayofmonth, today
-using Dates: Date, Year, Month, Week, Day, lastdayofmonth, today
+export       Date, Year, Month, Week, Day, lastdayofmonth, today, Sunday, Monday
+using Dates: Date, Year, Month, Week, Day, lastdayofmonth, today, Sunday, Monday
 
 using Dates: Dates, firstdayofyear, lastdayofyear, firstdayofmonth, firstdayofweek, lastdayofweek, dayofweek, monthabbr, dayabbr, year, month, day
 
@@ -25,7 +25,8 @@ abstract type CalendarWall end
                      endDate::Date ;
                      datespans::Vector{DateSpan}=[DateSpan([today()], :cyan)],
                      cell::NamedTuple{(:size, :margin)} = (size = (2, 1), margin = (1, 0)),
-                     locale::AbstractString="english")
+                     locale::AbstractString="english",
+                     firstweekday::Int=Sunday)
 
     VerticalCalendar(y::Year)
 
@@ -46,6 +47,7 @@ struct VerticalCalendar <: CalendarWall
     datespans::Vector{DateSpan}
     cell::NamedTuple{(:size, :margin)}
     locale::String
+    firstweekday::Int
 end
 ```
 """
@@ -55,6 +57,7 @@ struct VerticalCalendar <: CalendarWall
     datespans::Vector{DateSpan}
     cell::NamedTuple{(:size, :margin)}
     locale::String
+    firstweekday::Int
 end
 
 """
@@ -62,7 +65,8 @@ end
                        endDate::Date ;
                        datespans::Vector{DateSpan}=[DateSpan([today()], :cyan)],
                        cell::NamedTuple{(:size, :margin)} = (size = (2, 1), margin = (1, 0)),
-                       locale::AbstractString="english")
+                       locale::AbstractString="english",
+                       firstweekday::Int=Sunday)
 
     HorizontalCalendar(y::Year)
 
@@ -83,6 +87,7 @@ struct HorizontalCalendar <: CalendarWall
     datespans::Vector{DateSpan}
     cell::NamedTuple{(:size, :margin)}
     locale::String
+    firstweekday::Int
 end
 ```
 """
@@ -92,14 +97,16 @@ struct HorizontalCalendar <: CalendarWall
     datespans::Vector{DateSpan}
     cell::NamedTuple{(:size, :margin)}
     locale::String
+    firstweekday::Int
 end
 
 function (::Type{T})(startDate::Date,
                      endDate::Date ;
                      datespans::Vector{DateSpan}=[DateSpan([today()], :cyan)],
                      cell::NamedTuple{(:size, :margin)} = (size = (2, 1), margin = (1, 0)),
-                     locale::AbstractString="english") where {T <: CalendarWall}
-    T(startDate, endDate, datespans, cell, locale)
+                     locale::AbstractString="english",
+                     firstweekday::Int=Sunday) where {T <: CalendarWall}
+    T(startDate, endDate, datespans, cell, locale, firstweekday)
 end
 
 function (::Type{T})(y::Year; kwargs...) where {T <: CalendarWall}

@@ -1,19 +1,25 @@
 # module Calendars
 
+function getfirstweekdayoffset(monday::Date, firstweekday::Int)::Int
+    (firstweekday - 1 - 7) % 7
+end
+
 function Base.show(io::IO, cal::VerticalCalendar)
-    if Dates.Sun == dayofweek(cal.startDate)
-        sunday = cal.startDate
-    else
-        sunday = firstdayofweek(cal.startDate) - Day(1)
+    monday = firstdayofweek(cal.startDate)
+    firstweekdayoffset = getfirstweekdayoffset(monday, cal.firstweekday)
+    thedayfirstweekday = monday + Day(firstweekdayoffset)
+    if cal.startDate - thedayfirstweekday >= Week(1)
+        thedayfirstweekday += Week(1)
     end
-    grid = mapfoldl(hcat, sunday:Week(1):cal.endDate, init=Array{Date, 2}(undef, 7, 0)) do sun
-        sun:Day(1):(sun + Day(6))
+    grid = mapfoldl(hcat, thedayfirstweekday:Week(1):cal.endDate, init=Array{Date, 2}(undef, 7, 0)) do weekday
+        weekday:Day(1):(weekday + Day(6))
     end
     (rows, cols) = size(grid)
     th_years = []
     th_months = []
+    dayabbrs = circshift(dayabbr.(Dates.Mon:Dates.Sun; locale=cal.locale), -firstweekdayoffset)
     daysofweek = Dict(map([2, 4, 6]) do nth
-        (nth, dayabbr(nth - 1; locale=cal.locale))
+        (nth, dayabbrs[nth])
     end)
     for col in 1:cols
         nth = findfirst(d -> day(d) == 1, grid[:, col])

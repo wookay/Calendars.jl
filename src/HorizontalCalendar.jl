@@ -1,20 +1,20 @@
 # module Calendars
 
 function Base.show(io::IO, cal::HorizontalCalendar)
-    if Dates.Sun == dayofweek(cal.startDate)
-        sunday = cal.startDate
-    else
-        sunday = firstdayofweek(cal.startDate) - Day(1)
+    monday = firstdayofweek(cal.startDate)
+    firstweekdayoffset = getfirstweekdayoffset(monday, cal.firstweekday)
+    thedayfirstweekday = monday + Day(firstweekdayoffset)
+    if cal.startDate - thedayfirstweekday >= Week(1)
+        thedayfirstweekday += Week(1)
     end
-    grid = mapfoldl(vcat, collect(sunday:Week(1):cal.endDate), init=Array{Date, 2}(undef, 0, 7)) do sun
-        reshape(sun:Day(1):(sun + Day(6)), (1, 7))
+    grid = mapfoldl(vcat, collect(thedayfirstweekday:Week(1):cal.endDate), init=Array{Date, 2}(undef, 0, 7)) do weekday
+        reshape(weekday:Day(1):(weekday + Day(6)), (1, 7))
     end
     td_dict = Dict{Int,Union{Int,AbstractString}}()
-    daysofweek = merge(
-        Dict(1 => dayabbrshort(Dates.Sunday, locale=cal.locale)),
-        Dict(map(Dates.Monday:Dates.Saturday) do nth
-            (nth+1, dayabbrshort(nth, locale=cal.locale))
-        end))
+    dayabbrs = circshift(dayabbrshort.(Dates.Mon:Dates.Sun; locale=cal.locale), -firstweekdayoffset)
+    daysofweek = Dict(map(1:7) do nth
+        (nth, dayabbrs[nth])
+    end)
     (rows, cols) = size(grid)
     for row in 1:rows
         nth = findfirst(d -> day(d) == 1, grid[row, :])
