@@ -10,45 +10,60 @@ using .Dates: CompoundPeriod
          Times.Day(n::Union{Rational,AbstractFloat})::CompoundPeriod
 """
 function Dates.Day(n::Union{Rational,AbstractFloat})::CompoundPeriod
-    d = trunc(Int, n)
-    h = Hour(24(n - d))
-    h == Hour(24) ? Day(d + 1) : Day(d) + h
+    val = 24 * n
+    if 24 == val
+        (CompoundPeriod ∘ Day)(1)
+    else
+        Hour(val)
+    end
 end
 
 """
          Times.Hour(n::Union{Rational,AbstractFloat})::CompoundPeriod
 """
 function Dates.Hour(n::Union{Rational,AbstractFloat})::CompoundPeriod
-    h = trunc(Int, n)
-    m = Minute(60(n - h))
-    m == Minute(60) ? Hour(h + 1) : Hour(h) + m
+    val = 60 * n
+    if 60 == val
+        (CompoundPeriod ∘ Hour)(1)
+    else
+        Minute(val)
+    end
 end
 
 """
          Times.Minute(n::Union{Rational,AbstractFloat})::CompoundPeriod
 """
 function Dates.Minute(n::Union{Rational,AbstractFloat})::CompoundPeriod
-    m = trunc(Int, n)
-    s = Second(60(n - m))
-    s == Second(60) ? Minute(m + 1) : Minute(m) + s
+    val = 60 * n
+    if 60 == val
+        (CompoundPeriod ∘ Minute)(1)
+    else
+        Second(val)
+    end
 end
 
 """
          Times.Second(n::Union{Rational,AbstractFloat})::CompoundPeriod
 """
 function Dates.Second(n::Union{Rational,AbstractFloat})::CompoundPeriod
-    s = trunc(Int, n)
-    ms = Millisecond(1000(n - s))
-    ms == Millisecond(1000) ? Second(s + 1) : Second(s) + ms
+    val = 1000 * n
+    if 1000 == val
+        (CompoundPeriod ∘ Second)(1)
+    else
+        Millisecond(val)
+    end
 end
 
 """
          Times.Millisecond(n::Union{Rational,AbstractFloat})::CompoundPeriod
 """
 function Dates.Millisecond(n::Union{Rational,AbstractFloat})::CompoundPeriod
-    ms = trunc(Int, n)
-    ns = Nanosecond(round(Int, 1000_000(n - ms)))
-    ns == Nanosecond(1000_000) ? Millisecond(ms+1) : Millisecond(ms) + ns
+    val = 1000_000 * n
+    if 1000_000 == val
+        (CompoundPeriod ∘ Millisecond)(1)
+    else
+        Nanosecond(val)
+    end
 end
 
 Base.isless(x::Union{Period,Dates.CompoundPeriod}, y::Union{Period,Dates.CompoundPeriod}) = isless(Dates.tons(x), Dates.tons(y))
