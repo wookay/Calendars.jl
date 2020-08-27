@@ -1,9 +1,9 @@
 # module Calendars
 
-export       Date, Year, Month, Week, Day, lastdayofmonth, today, Sunday, Monday
-using Dates: Date, Year, Month, Week, Day, lastdayofmonth, today, Sunday, Monday
+export       Date, Year, Month, Week, Day, firstdayofmonth, lastdayofmonth, today, Sunday, Monday
+using Dates: Date, Year, Month, Week, Day, firstdayofmonth, lastdayofmonth, today, Sunday, Monday
 
-using Dates: Dates, firstdayofyear, lastdayofyear, firstdayofmonth, firstdayofweek, lastdayofweek, dayofweek, monthabbr, dayabbr, year, month, day
+using Dates: Dates, firstdayofyear, lastdayofyear, firstdayofweek, lastdayofweek, dayofweek, monthabbr, dayabbr, year, month, day
 
 """
 ```julia
@@ -165,8 +165,11 @@ function Base.:(==)(a::T, b::T) where {T <: DateSpan}
     getfield.(Ref(a), fieldnames(T)) == getfield.(Ref(b), fieldnames(T))
 end
 
+function Dates.Date(y::Int, m::Int, ::Union{typeof(firstdayofmonth), typeof(first)})::Date
+    firstdayofmonth(Date(y, m))
+end
 
-function Dates.Date(y::Int, m::Int, ::typeof(lastdayofmonth))::Date
+function Dates.Date(y::Int, m::Int, ::Union{typeof(lastdayofmonth), typeof(last)})::Date
     lastdayofmonth(Date(y, m))
 end
 
